@@ -1,0 +1,15 @@
+{
+    "properties":{
+        "name": "coruna",
+        "ARP": [],
+        "abc": "xyz"
+    }, 
+    "type" : "FeatureCollection",
+    "features" : [{
+        "type" : "Feature",
+        "GeometryCollection" : [{
+            
+        }]
+    }]
+
+}
