@@ -1,2 +1,7 @@
 *.pyc
 __pychace__
+.DS_Store
+.vscode
+v2/data/pdfs/*.pdf
+v2/data/json/*
+*.txt
