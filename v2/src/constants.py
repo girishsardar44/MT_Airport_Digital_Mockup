@@ -18,7 +18,7 @@ RWY_02_BEARING_POINT = 18.98
 RWY_02_THRESHOLD_POINT = ["411715.93N", "020505.41E"]
 
 #%%
-tableHeaderKeys = {
+runwayTableHeaderKeys = {
     "0":"RWY",
     "1":"Direction",
     "2":"Dimensions",
@@ -39,4 +39,22 @@ direction = {
 dimensions = {
     "length":"",
     "width":""
+}
+
+terminalStandsTableHeaderKeys = {
+    '0': 'Stand',
+    '1': 'Ramp',
+    '2': 'Coordinates',
+    '3': 'Exit',
+    '4': 'Max ACFT',
+    '5': 'Nose To',
+    '6': 'Remarks'
+}
+obstaclesHeaderKeys ={
+    '0':'Identifier',
+    '1':'Type',
+    '2':'Latitude',
+    '3':'Longitude',
+    '4':'HorizontalAccuracy',
+    '5':''
 }

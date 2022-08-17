@@ -1,15 +1,52 @@
+from executeCamelot import executeCamelot
+from askUserInputs import AskUserInput
+import fileSystem as fs
 import dmsToddConverter as dmstoDd
 import constants
-import geoJsonPointsClass
-import coordinatesFromThreshold as cft
+import joinJsonFiles
 from coordinatesFromThreshold import findLongitudeLatitude2
-from geojson import Point, LineString
-coruna_thr_lat = dmstoDd.convertDmsToDd(constants.RWY_03_THRESHOLD_POINT[0])
-coruna_thr_long = dmstoDd.convertDmsToDd(constants.RWY_03_THRESHOLD_POINT[1])
-[lat2, long2] = findLongitudeLatitude2(
-    coruna_thr_lat, coruna_thr_long, constants.RWY_03_DIM[0], constants.RWY_03_BEARING_POINT)
+import convertToGeoJson as cgj
 
-print(LineString(
-    [(coruna_thr_long, coruna_thr_lat), (long2, lat2)], precision=15))
-# print(Point((coruna_thr_lat, coruna_thr_long),precision = 15))
-# print(lat2,long2)
+
+#%%  Raw inputs
+userInputs = AskUserInput()
+airportDetails = userInputs.askUserAirportDetails()
+airportDetails = userInputs.askUserRunwayDetails(airportDetails)
+airportDetails = userInputs.askUserTerminalStandDetails(airportDetails)
+#%% Files & Paths
+files = fs.LoadFiles()
+basePath = files.getBasePath()
+airportFiles = files.listInputFiles(airportDetails['airportName'])
+airportFiles = files.findAllInputFiles(airportFiles)
+#%%Camelot
+executeCamelot(airportDetails['airportName'], airportFiles['runways'],airportDetails['runwaysTablePageNumber'], airportDetails['runwaysTableNumber'])
+
+#%% Runway json
+airport = airportDetails['airportName']
+runwayFileName = files.removeFileExtension(airportFiles['runways'], '.pdf')
+airportJson = airport+'json'
+
+# json =  files.readJson(airportDetails['airportName'], runwayFileName)
+# dummy = convertToGeoJson.convertToGeoJson(json)
+# print(dummy)
+ # Todo execute cleaning json and convert to geojson for runways
+#%%
+# page - 2, table - 0 
+terminalStandsFileName = files.removeFileExtension(airportFiles['terminalStands'], '.pdf')
+executeCamelot(airport, airportFiles['terminalStands'], airportDetails['terminalStandsTablePageNumber'],airportDetails['terminalStandsTableNumber'])
+# 
+# get json and separate usable data from 
+
+#%%
+obstaclesFilesName = files.removeFileExtension(airportFiles['obstacles'],'.csv')
+print(obstaclesFilesName)
+files.csvToJson(airportDetails['airportName'], obstaclesFilesName)
+#%%%
+allRunways = joinJsonFiles.joinRunwayJsonFiles(airportDetails, airportFiles)
+allTerminalStands = joinJsonFiles.joinTerminalJsonFiles(airportDetails, airportFiles)
+
+runwaysGeoJson = cgj.convertRunwaysToGeoJson(allRunways)
+terminalStandsGeoJson = cgj.convertTerminalStandsJsonToGeojson(allTerminalStands)
+
+# print(terminalStandsGeoJson)
+print(runwaysGeoJson)

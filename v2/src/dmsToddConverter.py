@@ -2,7 +2,7 @@
 import re
 from math import copysign
 # %%
-# Converts Degrees Minutes and Seconds to Longitude and Latitude.
+# Converts Degrees Minutes and Seconds to Longitude and Latitude (aka: Decimal Degrees).
 def convertDmsToDd(a):
     dd, alphabets = splitNumbersAndCharacters(a)
     dd = str(dd)
@@ -28,6 +28,8 @@ def splitNumbersAndCharacters(dd):
 def validateCoordinates(coordinates):
     identifiers = ['latitude','longitude']
     for selector in identifiers:
+        # breakpoint()
+        coordinates[selector] = removeWhiteSpace(coordinates[selector])
         numbers = coordinates[selector].split('.')
         length = len(numbers[0])
         if length > 6 :
@@ -35,3 +37,10 @@ def validateCoordinates(coordinates):
             coordinates[selector] = newCoordinate+'.'+numbers[1]
     return coordinates
 #%% 
+def removeWhiteSpace(string):
+    if ' ' in str(string):
+        print('removing space')
+        dum = string.replace(' ', "")
+        return dum
+    else:
+        return string
