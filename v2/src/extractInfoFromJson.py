@@ -62,15 +62,15 @@ class extractUsableDataFromJson:
                 "longitude": str(data[1])
             }
             return coordinates
-    
+
     def replaceQuotes(self, text, replaceWith=''):
         if '\'' in text:
-            text =  self.removeUniCode(text)
-            text = text.replace('\'',replaceWith)
+            text = self.removeUniCode(text)
+            text = text.replace('\'', replaceWith)
 
         if '\"' in text:
-            text = text.replace('\"',replaceWith)
-        
+            text = text.replace('\"', replaceWith)
+
         return text
 
     def loadJson(self, fileNameWithExtension):

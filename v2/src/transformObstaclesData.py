@@ -1,19 +1,21 @@
 
-from hamcrest import none
 import fileSystem
-import transformJsonDataToGeoJson
-
-td = transformJsonDataToGeoJson.TransformJsonToGeoJson()
+import transformDataCommon
+from geojson import Point, FeatureCollection, Feature
+tdc = transformDataCommon.TransformDataCommon()
 fs = fileSystem.LoadFiles()
-
-name = "LE_Amdt_A_2020_03_AD_2_10_LECO_en_obstacles"
-
-airportName = "coruna"
-
-obstacles = fs.readJson(airportName, name)
 
 
 class TransformObstaclesData:
+
+    def combineObstaclesPointAndProperties(self, features, properties):
+        collection = []
+        for n in features.keys():
+            m = int(n)
+            del properties[m]['Coordinates']
+            features[n]['properties'] = properties[m]
+            collection.append(features[n])
+        return FeatureCollection(collection)
 
     def getKeysAndValues(self, obstacles):
         keys = list(obstacles.keys())
@@ -35,7 +37,7 @@ class TransformObstaclesData:
             newObstaclesData[newKeys[n]] = obstaclesValues[n]
         return newObstaclesData
 
-    def convertCoordinates(self, latitudes, longitudes):
+    def combineCoordinates(self, latitudes, longitudes):
         coordinates = {}
         allCoordinates = {}
         listLength = (len(latitudes))
@@ -57,7 +59,7 @@ class TransformObstaclesData:
 
     def convertCoordinatesToDms(self, coordinates):
         convertedCoordinates = []
-        convertedCoordinates.append(td.convertRunwayThresholds(coordinates))
+        convertedCoordinates.append(tdc.convertCoordinatesToDMS(coordinates))
         return convertedCoordinates
 
     def mergeObstacleData(self, obstacles):
@@ -70,17 +72,3 @@ class TransformObstaclesData:
                 mergedObstacles[n] = obstacles[n][str(m)]
             allObstacles.append(mergedObstacles)
         return allObstacles
-
-
-data = TransformObstaclesData()
-obstacleKeys, obstacleValues = data.getKeysAndValues(obstacles)
-keys = data.getEnglishKeys(obstacleKeys)
-newObstacles = data.mergeNewKeys(keys, obstacleValues)
-newCoordinates = data.convertCoordinates(list(
-    newObstacles['Latitude'].values()), list(newObstacles['Longitude'].values()))
-newObstacles = data.addNewCoordinatesToObstacles(newObstacles, newCoordinates)
-dmsCoordinates = td.convertRunwayThresholds((newObstacles['Coordinates']))
-obstaclesPointFeatures = td.createRunwayGeoJsonPointFeatures(dmsCoordinates)
-mergedObstacles = data.mergeObstacleData(newObstacles)
-obstaclesCollection = td.combineObstaclesPointAndProperties(obstaclesPointFeatures,mergedObstacles)
-print(obstaclesCollection)

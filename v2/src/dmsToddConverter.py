@@ -28,7 +28,6 @@ def splitNumbersAndCharacters(dd):
 def validateCoordinates(coordinates):
     identifiers = ['latitude','longitude']
     for selector in identifiers:
-        # breakpoint()
         coordinates[selector] = removeWhiteSpace(coordinates[selector])
         numbers = coordinates[selector].split('.')
         length = len(numbers[0])
@@ -39,7 +38,6 @@ def validateCoordinates(coordinates):
 #%% 
 def removeWhiteSpace(string):
     if ' ' in str(string):
-        print('removing space')
         dum = string.replace(' ', "")
         return dum
     else:

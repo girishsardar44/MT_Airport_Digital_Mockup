@@ -50,11 +50,3 @@ terminalStandsTableHeaderKeys = {
     '5': 'Nose To',
     '6': 'Remarks'
 }
-obstaclesHeaderKeys ={
-    '0':'Identifier',
-    '1':'Type',
-    '2':'Latitude',
-    '3':'Longitude',
-    '4':'HorizontalAccuracy',
-    '5':''
-}

@@ -52,14 +52,12 @@ class LoadFiles:
         if not isExists:
             os.makedirs(path, exist_ok='false')
             print('New directory created at \n', path)
-        else:
-            print('Directory Already exists')
 
     def csvToJson(self, airportName, csvName):
         basePath = self.getBasePath()
         csvPath = basePath+'data/'+airportName+'/inputData/'+csvName+'.csv'
         jsonPath = basePath+'data/'+airportName+'/json/'+csvName+'.json'
-        obstaclesDataFrame = pd.read_csv(csvPath,sep=';')
+        obstaclesDataFrame = pd.read_csv(csvPath, sep=';')
         obstaclesDataFrame.to_json(jsonPath)
 
     def removeFileExtension(self, file, extension):
